@@ -10,7 +10,7 @@ Furniture:
     z: 1
   pose:
     position:
-      x: 0.7
+      x: 1
       y: 0
       z: 0
     orientation:

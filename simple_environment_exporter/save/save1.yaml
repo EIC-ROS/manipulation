@@ -1,6 +1,6 @@
 Frame: map
 Furniture:
-- id: Table.stl
+- id: table
   mesh_source: Table.stl
   pose:
     orientation:
@@ -9,7 +9,7 @@ Furniture:
       y: 0.0
       z: 0.0
     position:
-      x: 1.759056568145752
+      x: 1.465527057647705
       y: 0.0
       z: 0.0
   shape:
@@ -17,21 +17,38 @@ Furniture:
     y: 1
     z: 1
   type: mesh
-- id: i
+- id: shelf
   pose:
     orientation:
-      w: 1.0
-      x: 0.0
-      y: 0.0
-      z: 0.0
+      w: 0.8667171597480774
+      x: 4.70898431359501e-10
+      y: -8.667510598137085e-10
+      z: 0.49879997968673706
     position:
-      x: 2.9569491744041443e-08
-      y: 0.8569073677062988
-      z: 0.38066911697387695
+      x: 1.0665355920791626
+      y: 0.06911665201187134
+      z: 0.8802065849304199
   shape:
-    x: 0.1
-    y: 0.2
-    z: 0.5
+    x: 0.05
+    y: 0.1
+    z: 0.3
   type: box
+- id: shelf2
+  mesh_source: Cupboard.stl
+  pose:
+    orientation:
+      w: 0.9241819381713867
+      x: -2.2751731165726596e-08
+      y: 4.498001970887344e-11
+      z: 0.3819529712200165
+    position:
+      x: -0.21995091438293457
+      y: 1.3108901977539062
+      z: -8.242204785346985e-08
+  shape:
+    x: 1
+    y: 1
+    z: 1
+  type: mesh
 Mesh_Folder: /mesh/
 Name: save1

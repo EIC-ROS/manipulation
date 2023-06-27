@@ -207,7 +207,8 @@ class yaml_maker:
         flist = {"Name":self.name,"Frame":self.frame,"Mesh_Folder":self.mesh_folder,"Furniture":dlist}
         with open(self.file,"w") as stream:
             yaml.dump(flist,stream,default_flow_style=False)
-        rospy.logwarn("END")
+        rospy.logwarn("Finishing making YAML")
+        rospy.signal_shutdown("finishing")
 
 
 
