@@ -1,0 +1,5 @@
+<launch>
+  <arg name="node_start_delay" default="0.1" />  
+  <node name="camera" pkg="dy_custom" type="camera" output="screen"/>
+  <node name="gripper" pkg="dy_custom" type="gripper" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+</launch>

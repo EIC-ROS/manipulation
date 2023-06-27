@@ -1,0 +1,5 @@
+<launch>
+    <node pkg = "place" name = "place" type = "place.py" output = "screen"/>
+    <node pkg = "place" name = "placemain" type = "placemain" output = "screen"/>
+    <node pkg = "place" name = "dimensioncal" type = "dimensioncal" output = "screen"/>
+</launch>

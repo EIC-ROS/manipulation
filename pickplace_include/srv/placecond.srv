@@ -1,0 +1,4 @@
+int64 states
+---
+bool success
+string message

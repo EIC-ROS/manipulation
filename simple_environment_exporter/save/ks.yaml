@@ -1,0 +1,37 @@
+Frame: map
+Furniture:
+- id: sds
+  mesh_source: Table.stl
+  pose:
+    orientation:
+      w: 1.0
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    position:
+      x: 1.2596592903137207
+      y: 0.0
+      z: 0.0
+  shape:
+    x: 1
+    y: 1
+    z: 1
+  type: mesh
+- id: b
+  pose:
+    orientation:
+      w: 1.0
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    position:
+      x: -1.5103130340576172
+      y: 0.0
+      z: 0.0
+  shape:
+    x: 0.2
+    y: 0.3
+    z: 0.4
+  type: box
+Mesh_Folder: /mesh/
+Name: ks

@@ -1,0 +1,58 @@
+Name: ed1
+Frame: world
+Mesh_Folder: /mesh/
+Furniture:
+- id: table
+  type: mesh
+  shape:
+    x: 1
+    y: 1
+    z: 1
+  pose:
+    position:
+      x: 0.7
+      y: 0
+      z: 0
+    orientation:
+      x: 0
+      y: 0
+      z: 0
+      w: 1
+  mesh_source: Table.stl
+
+- id: shelf
+  type: shelf
+  shape:
+    x: 1
+    y: 1
+    z: 1
+  pose:
+    position:
+      x: 1.0
+      y: 1
+      z: 0
+    orientation:
+      x: 0
+      y: 0
+      z: 0
+      w: 1
+  mesh_source: Cupboard.stl
+  shelf_height: [1,2]
+
+
+- id: box
+  type: box
+  shape:
+    x: 1
+    y: 1
+    z: 1
+  pose:
+    position:
+      x: 0.7
+      y: 0
+      z: 0
+    orientation:
+      x: 0
+      y: 0
+      z: 0
+      w: 1

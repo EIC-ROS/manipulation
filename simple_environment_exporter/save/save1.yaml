@@ -1,0 +1,37 @@
+Frame: map
+Furniture:
+- id: Table.stl
+  mesh_source: Table.stl
+  pose:
+    orientation:
+      w: 1.0
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    position:
+      x: 1.759056568145752
+      y: 0.0
+      z: 0.0
+  shape:
+    x: 1
+    y: 1
+    z: 1
+  type: mesh
+- id: i
+  pose:
+    orientation:
+      w: 1.0
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    position:
+      x: 2.9569491744041443e-08
+      y: 0.8569073677062988
+      z: 0.38066911697387695
+  shape:
+    x: 0.1
+    y: 0.2
+    z: 0.5
+  type: box
+Mesh_Folder: /mesh/
+Name: save1

@@ -1,0 +1,3 @@
+<launch>
+  <node name="camegrip" pkg="dy_custom" type="camegrip"/>
+</launch>

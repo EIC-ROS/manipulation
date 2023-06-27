@@ -1,0 +1,4 @@
+uint32 degree
+int32 velocity
+---
+bool success

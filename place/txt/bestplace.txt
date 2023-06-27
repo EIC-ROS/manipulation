@@ -1,0 +1,268 @@
+#!/usr/bin/env python3
+
+import rospy
+import moveit_commander
+from geometry_msgs.msg import Pose
+import tf
+import copy
+import math
+from pickplace_include.srv import placecond, placecondResponse
+
+class cr3pick:
+    def __init__(self):
+        rospy.init_node("placenode", anonymous=True)
+        
+        self.move_group = moveit_commander.MoveGroupCommander("arm")
+        self.scene = moveit_commander.PlanningSceneInterface()
+        self.robot = moveit_commander.RobotCommander()
+        
+        self.tf_listener1 = tf.TransformListener()
+        self.tf_listener2 = tf.TransformListener()
+        self.tf_listener3 = tf.TransformListener()
+        self.tf_listener4 = tf.TransformListener()
+        self.tf_listener5 = tf.TransformListener()
+        self.tf_listener6 = tf.TransformListener()
+        self.tf_listener7 = tf.TransformListener()
+        
+        self.Table_Retreat = False
+        self.Table_Safe_Retreat = False
+        
+        self.Shelf_Approach = False
+        self.Shelf_Retreat = False
+        self.Shelf_Safe_Retreat = False
+        
+        self.Home_success = False
+        self.Shelf_success = False
+        self.Table_success = False
+        
+        self.attempt = 1
+        
+        self.s = rospy.Service("place", placecond, self.callback)
+        
+        self.grasping_group = "hand"
+        self.touch_links = self.robot.get_link_names(group=self.grasping_group)
+    
+    def set_home_walkie(self,a,b,c,d,e,f):
+        joint_goal = self.move_group.get_current_joint_values()
+        
+        joint_goal[0] = a
+        joint_goal[1] = b
+        joint_goal[2] = c
+        joint_goal[3] = d
+        joint_goal[4] = e
+        joint_goal[5] = f
+        
+        self.Home_success = self.move_group.go(joint_goal, wait=True)
+        self.move_group.stop()
+        return
+    
+
+    def callback(self, data):
+        self.set_home_walkie(0,0,0,0,0,0)
+        self.Home_success = False
+        if data.states == 1:
+            rospy.logwarn("Table Place")
+            while self.attempt < 4 and not self.Table_success:
+                self.tf_listener1.waitForTransform("base_link", "place_place", rospy.Time(), rospy.Duration(1.0))
+                (trans, rot) = self.tf_listener1.lookupTransform("base_link", "place_place", rospy.Time(0))
+                ap = Pose()
+                
+                ap.position.x = trans[0]
+                ap.position.y = trans[1]
+                ap.position.z = trans[2]
+                
+                ap.orientation.x = rot[0]
+                ap.orientation.y = rot[1]
+                ap.orientation.z = rot[2]
+                ap.orientation.w = rot[3]
+            
+                self.move_group.set_pose_target(ap)
+                self.Table_success = self.move_group.go(wait=True)
+                self.move_group.stop()
+                self.move_group.clear_pose_targets()
+                
+                if self.Table_success:
+                    break
+                self.attempt += 1
+            
+            self.attempt = 1
+            gp = Pose()
+            
+            self.scene.remove_attached_object("robotiq_85_base_link", "box1")
+                
+            self.tf_listener2.waitForTransform("base_link", "place_approach", rospy.Time(), rospy.Duration(1.0))
+            (trans2, rot2) = self.tf_listener2.lookupTransform("base_link", "place_approach", rospy.Time(0))
+            
+            gp.position.x = trans2[0]
+            gp.position.y = trans2[1]
+            gp.position.z = trans2[2]
+            
+            gp.orientation.x = rot2[0]
+            gp.orientation.y = rot2[1]
+            gp.orientation.z = rot2[2]
+            gp.orientation.w = rot2[3]
+            
+            cartesianpath = []
+            cartesianpath.append(copy.deepcopy(gp))
+            (plan,fraction) = self.move_group.compute_cartesian_path(cartesianpath, 0.01, 0.0)
+            self.Table_Retreat = self.move_group.execute(plan, wait=True)
+            cartesianpath = []
+            
+            # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
+            self.set_home_walkie(0,0,0,0,0,0)
+            
+            if not self.Home_success:
+                self.tf_listener3.waitForTransform("base_link", "place_safe_retreat", rospy.Time(), rospy.Duration(1.0))
+                (trans3, rot3) = self.tf_listener3.lookupTransform("base_link", "place_safe_retreat", rospy.Time(0))
+                
+                gp.position.x = trans3[0]
+                gp.position.y = trans3[1]
+                gp.position.z = trans3[2]
+                
+                gp.orientation.x = rot3[0]
+                gp.orientation.y = rot3[1]
+                gp.orientation.z = rot3[2]
+                gp.orientation.w = rot3[3]
+                
+                cartesianpath = []
+                cartesianpath.append(copy.deepcopy(gp))
+                (plan,fraction) = self.move_group.compute_cartesian_path(cartesianpath, 0.01, 0.0)
+                self.Table_Safe_Retreat = self.move_group.execute(plan, wait=True)
+                cartesianpath = []
+                
+                # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
+                self.set_home_walkie(0,0,0,0,0,0)
+            
+            x = placecondResponse()
+            if self.Table_success and self.Home_success:
+                x.success = True
+                x.message = "The object is sucessfully placed, and the arm returned to Home"
+            elif self.Table_success and not self.Home_success:
+                x.success = False
+                x.message = "The object is successfully placed, but the arm couldn't manage to return back to Home"
+            else:
+                x.success = False
+                x.message = "Place Failed"
+            
+            self.Home_success = False
+            self.Table_Retreat = False
+            self.Table_Safe_Retreat = False
+            self.Table_success = False
+            self.scene.remove_world_object("box1")
+            return x
+
+        else:
+            rospy.logwarn("Shelf Place")
+            
+            while self.attempt < 4 and not self.Shelf_Approach:
+                self.tf_listener4.waitForTransform("base_link", "place_approach", rospy.Time(), rospy.Duration(1.0))
+                (trans4, rot4) = self.tf_listener4.lookupTransform("base_link", "place_approach", rospy.Time(0))
+                ap = Pose()
+                
+                ap.position.x = trans4[0]
+                ap.position.y = trans4[1]
+                ap.position.z = trans4[2]
+                
+                ap.orientation.x = rot4[0]
+                ap.orientation.y = rot4[1]
+                ap.orientation.z = rot4[2]
+                ap.orientation.w = rot4[3]
+            
+                self.move_group.set_pose_target(ap)
+                self.Shelf_Approach = self.move_group.go(wait=True)
+                self.move_group.stop()
+                self.move_group.clear_pose_targets()
+                
+                if self.Shelf_Approach:
+                    break
+                self.attempt += 1
+                
+            gp = Pose()
+            self.attempt = 1
+            
+            if self.Shelf_Approach == True:
+                self.tf_listener5.waitForTransform("base_link", "place_place", rospy.Time(), rospy.Duration(1.0))
+                (trans5, rot5) = self.tf_listener5.lookupTransform("base_link", "place_place", rospy.Time(0))
+                
+                gp.position.x = trans5[0]
+                gp.position.y = trans5[1]
+                gp.position.z = trans5[2]
+                
+                gp.orientation.x = rot5[0]
+                gp.orientation.y = rot5[1]
+                gp.orientation.z = rot5[2]
+                gp.orientation.w = rot5[3]
+                
+                cartesianpath = []
+                cartesianpath.append(copy.deepcopy(gp))
+                (plan,fraction) = self.move_group.compute_cartesian_path(cartesianpath, 0.01, 0.0)
+                self.Shelf_success = self.move_group.execute(plan, wait=True)
+                cartesianpath = []
+                
+                self.scene.remove_attached_object("robotiq_85_base_link", "box1")
+                
+                self.tf_listener6.waitForTransform("base_link", "place_approach", rospy.Time(), rospy.Duration(1.0))
+                (trans6, rot6) = self.tf_listener6.lookupTransform("base_link", "place_approach", rospy.Time(0))
+                
+                gp.position.x = trans6[0]
+                gp.position.y = trans6[1]
+                gp.position.z = trans6[2]
+                
+                gp.orientation.x = rot6[0]
+                gp.orientation.y = rot6[1]
+                gp.orientation.z = rot6[2]
+                gp.orientation.w = rot6[3]
+                
+                cartesianpath = []
+                cartesianpath.append(copy.deepcopy(gp))
+                (plan,fraction) = self.move_group.compute_cartesian_path(cartesianpath, 0.01, 0.0)
+                self.Shelf_Retreat = self.move_group.execute(plan, wait=True)
+                cartesianpath = []
+                
+                # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
+                self.set_home_walkie(0,0,0,0,0,0)
+                
+                if not self.Home_success:
+                    self.tf_listener7.waitForTransform("base_link", "place_safe_retreat", rospy.Time(), rospy.Duration(1.0))
+                    (trans7, rot7) = self.tf_listener7.lookupTransform("base_link", "place_safe_retreat", rospy.Time(0))
+                    
+                    gp.position.x = trans7[0]
+                    gp.position.y = trans7[1]
+                    gp.position.z = trans7[2]
+                    
+                    gp.orientation.x = rot7[0]
+                    gp.orientation.y = rot7[1]
+                    gp.orientation.z = rot7[2]
+                    gp.orientation.w = rot7[3]
+                    
+                    cartesianpath = []
+                    cartesianpath.append(copy.deepcopy(gp))
+                    (plan,fraction) = self.move_group.compute_cartesian_path(cartesianpath, 0.01, 0.0)
+                    self.Shelf_Safe_Retreat = self.move_group.execute(plan, wait=True)
+                    cartesianpath = []
+                    
+                    # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
+                    self.set_home_walkie(0,0,0,0,0,0)
+                
+            x = placecondResponse()
+            if self.Shelf_success and self.Home_success:
+                x.success = True
+                x.message = "The object is sucessfully placed, and the arm returned to Home"
+            elif self.Shelf_success and not self.Home_success:
+                x.success = False
+                x.message = "The object is successfully placed, but the arm couldn't manage to return back to Home"
+            else:
+                x.success = False
+                x.message = "Place Failed"
+            
+            self.Home_success = False
+            self.Shelf_Approach = False
+            self.Shelf_Retreat = False
+            self.Shelf_Safe_Retreat = False
+            self.Sehlf_success = False
+            self.scene.remove_world_object("box1")
+            return x        
+        
+if __name__=="__main__":
+    cr3pick()
+    rospy.spin()

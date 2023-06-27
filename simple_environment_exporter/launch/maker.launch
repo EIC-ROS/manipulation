@@ -1,0 +1,4 @@
+<launch>
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find simple_environment_exporter)/config/sex_save.rviz" />
+  <node type="SEX_maker.py" name="sex_maker" pkg="simple_environment_exporter" output="screen"/>
+</launch>

@@ -1,0 +1,4 @@
+<launch>
+    <node pkg = "pick" name = "pick" type = "pick.py" output = "screen"/>
+    <node pkg = "pick" name = "pickmain" type = "pickmain" output = "screen"/>
+</launch>
