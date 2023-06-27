@@ -10,27 +10,21 @@ project(pick)
 find_package(catkin REQUIRED COMPONENTS
     roscpp
     rospy
-    interactive_markers
     moveit_core
     moveit_ros_planning
     moveit_ros_planning_interface
     moveit_ros_perception
     rviz_visual_tools
     moveit_visual_tools
-    pluginlib
     geometric_shapes
-    pcl_ros
-    pcl_conversions
     pickplace_include
-    rosbag
     tf2_ros
     tf2_eigen
     tf2_geometry_msgs
     tf2_msgs
     std_msgs
     message_generation
-    gpd_ros
-    vision_msgs
+
 )
 
 ## System dependencies are found with CMake's conventions
@@ -138,7 +132,6 @@ catkin_package(
         message_runtime
         moveit_visual_tools
         moveit_ros_planning_interface
-        interactive_markers
         tf2_geometry_msgs
         
     DEPENDS
