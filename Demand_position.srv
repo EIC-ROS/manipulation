@@ -1,0 +1,4 @@
+float32 demand_position
+---
+bool send
+float32 confident_position
