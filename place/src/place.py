@@ -58,7 +58,7 @@ class cr3pick:
     
 
     def callback(self, data):
-        self.set_home_walkie(0,0,0,0,0,0)
+        self.set_home_walkie(0,0,0,0,0,0.79)
         self.Home_success = False
         if data.states == 1:
             rospy.logwarn("Table Place")
@@ -88,7 +88,7 @@ class cr3pick:
             self.attempt = 1
             gp = Pose()
             
-            self.scene.remove_attached_object("robotiq_85_base_link", "box1")
+            self.scene.remove_attached_object("eff_base_link", "box1")
                 
             self.tf_listener2.waitForTransform("base_link", "place_approach", rospy.Time(), rospy.Duration(1.0))
             (trans2, rot2) = self.tf_listener2.lookupTransform("base_link", "place_approach", rospy.Time(0))
@@ -199,7 +199,7 @@ class cr3pick:
                 self.Shelf_success = self.move_group.execute(plan, wait=True)
                 cartesianpath = []
                 
-                self.scene.remove_attached_object("robotiq_85_base_link", "box1")
+                self.scene.remove_attached_object("eff", "box1")
                 
                 self.tf_listener6.waitForTransform("base_link", "place_approach", rospy.Time(), rospy.Duration(1.0))
                 (trans6, rot6) = self.tf_listener6.lookupTransform("base_link", "place_approach", rospy.Time(0))

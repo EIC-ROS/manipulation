@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-from sympy import false, true
 import rospy
 import moveit_commander
 from geometry_msgs.msg import Pose, PoseStamped
@@ -151,7 +149,7 @@ class cr3pick:
                 rospy.logwarn("Grasped")
                 rospy.sleep(0.5)
                 
-            self.scene.attach_box("robotiq_85_base_link", "box1", touch_links=self.touch_links)
+            self.scene.attach_box("eff", "box1", touch_links=self.touch_links)
             # self.move_group.set_planner_id("TRRT")
             
             # constraints = Constraints()
@@ -214,7 +212,7 @@ class cr3pick:
             # (plan,fraction) = self.move_group.compute_cartesian_path(cartesianpath, 0.01, 0.0)
             # self.Retreat_success = (self.move_group.execute(plan, wait=True))
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
-            self.set_home_walkie(0,0,0,0,0,0)
+            self.set_home_walkie(0,0,0,0,0,0.79)
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
             # self.set_home_walkie(3.14, 1.5708, -1.5708, 0, 2.4, 0)
             cartesianpath = []
@@ -225,13 +223,13 @@ class cr3pick:
             x.message = "Pick success"
         elif self.Pick_success and not self.Home_success:
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
-            self.set_home_walkie(0,0,0,0,0,0)
+            self.set_home_walkie(0,0,0,0,0,0.79)
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
             x.success = False
             x.message = "Pick success, Home fail"
         else:
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
-            self.set_home_walkie(0,0,0,0,0,0)
+            self.set_home_walkie(0,0,0,0,0,0.79)
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
             x.success = False
             x.message = "Pick Fail"

@@ -25,11 +25,11 @@ srv.posercam.pose.orientation.w = quat[3]
 
 srv.check = True
 #water bottle
-srv.dimension.x = 0.12
+srv.dimension.x = 0.06
 srv.dimension.y = 0.06
 srv.dimension.z = 0.24
 
-srv.posercam.pose.position.x = 0.62
+srv.posercam.pose.position.x = 0.66
 srv.posercam.pose.position.y = 0
 srv.posercam.pose.position.z = 0.627
 
