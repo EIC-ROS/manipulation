@@ -1,14 +1,11 @@
 #include <ros/ros.h>
 #include <cmath>
-#include <tf2_ros/static_transform_broadcaster.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <tf/transform_datatypes.h>
 #include <geometry_msgs/PoseStamped.h>
-#include <moveit/planning_scene_interface/planning_scene_interface.h>
-#include <moveit/move_group_interface/move_group_interface.h>
 #include <geometry_msgs/Pose.h>
 #include <tf/transform_listener.h>
 #include <pickplace_include/dimension.h>
@@ -21,8 +18,6 @@ class place{
         ros::ServiceServer service2;
         ros::ServiceServer service3;
         tf::StampedTransform tfStamped;
-
-        moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
         double pi = M_PI;
         double approach = 0.05;

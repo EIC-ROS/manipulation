@@ -5,13 +5,13 @@ import moveit_commander
 
 class cr3pick:
     def __init__(self):
-        rospy.init_node("walkiegohome", anonymous=True)
+        rospy.init_node("walkiegosafe", anonymous=True)
         self.move_group = moveit_commander.MoveGroupCommander("arm")
         self.scene = moveit_commander.PlanningSceneInterface()
         self.robot = moveit_commander.RobotCommander()
         self.Home_success = False
-        self.set_home_walkie(0,0,0,0,0,0)
-        rospy.signal_shutdown('Home completed')
+        self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
+        rospy.signal_shutdown('Safe completed')
     
     def set_home_walkie(self,a,b,c,d,e,f):
         joint_goal = self.move_group.get_current_joint_values()
@@ -23,7 +23,7 @@ class cr3pick:
         joint_goal[5] = f
         self.Home_success = self.move_group.go(joint_goal, wait=True)
         self.move_group.stop()
-        # rospy.logwarn("Walkie is back to HOME")
+        rospy.logwarn("Walkie is back to HOME")
         return
 
 

@@ -58,7 +58,7 @@ class cr3pick:
     
 
     def callback(self, data):
-        self.set_home_walkie(0,0,0,0,0,0.79)
+        self.set_home_walkie(0,0,0,0,0,-0.79)
         self.Home_success = False
         if data.states == 1:
             rospy.logwarn("Table Place")
@@ -138,11 +138,20 @@ class cr3pick:
                 x.success = True
                 x.message = "The object is sucessfully placed, and the arm returned to Home"
             elif self.Table_success and not self.Home_success:
-                x.success = False
-                x.message = "The object is successfully placed, but the arm couldn't manage to return back to Home"
+                self.set_home_walkie(0,0,0,0,0,0)
+                if not self.Home_success:
+                    x.success = True
+                    x.message = "The object is successfully placed, but the arm couldn't manage to return back to Home"
+                else:
+                    x.success = True
+                    x.message = "The object is successfully placed, and the arm returned to Home"
             else:
-                x.success = False
-                x.message = "Place Failed"
+                if self.Home_success:
+                    x.success = False
+                    x.message = "Place Failed"
+                else:
+                    x.success = False
+                    x.message = "Place Failed, and the arm is stucked"
             
             self.Home_success = False
             self.Table_Retreat = False
@@ -245,15 +254,26 @@ class cr3pick:
                     self.set_home_walkie(0,0,0,0,0,0)
                 
             x = placecondResponse()
-            if self.Shelf_success and self.Home_success:
+            if self.Table_success and self.Home_success:
+                self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
                 x.success = True
                 x.message = "The object is sucessfully placed, and the arm returned to Home"
-            elif self.Shelf_success and not self.Home_success:
-                x.success = False
-                x.message = "The object is successfully placed, but the arm couldn't manage to return back to Home"
+            elif self.Table_success and not self.Home_success:
+                self.set_home_walkie(0,0,0,0,0,0)
+                self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
+                if not self.Home_success:
+                    x.success = True
+                    x.message = "The object is successfully placed, but the arm couldn't manage to return back to Home"
+                else:
+                    x.success = True
+                    x.message = "The object is successfully placed, and the arm returned to Home"
             else:
-                x.success = False
-                x.message = "Place Failed"
+                if self.Home_success:
+                    x.success = False
+                    x.message = "Place Failed"
+                else:
+                    x.success = False
+                    x.message = "Place Failed, and the arm is stucked"
             
             self.Home_success = False
             self.Shelf_Approach = False

@@ -62,7 +62,7 @@ class cr3pick:
         # constraints.orientation_constraints = []
         # self.move_group.set_path_constraints(constraints)
         
-        self.set_home_walkie(0,0,0,0,0,0)
+        self.set_home_walkie(0,0,0,0,0,-0.79)
         self.Home_success = False
         while (not self.Approach_success):
             ap = Pose()
@@ -212,7 +212,8 @@ class cr3pick:
             # (plan,fraction) = self.move_group.compute_cartesian_path(cartesianpath, 0.01, 0.0)
             # self.Retreat_success = (self.move_group.execute(plan, wait=True))
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
-            self.set_home_walkie(0,0,0,0,0,0.79)
+            self.set_home_walkie(0,0,0,0,0,-0.79)
+            self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
             # self.set_home_walkie(3.14, 1.5708, -1.5708, 0, 2.4, 0)
             cartesianpath = []
@@ -223,13 +224,15 @@ class cr3pick:
             x.message = "Pick success"
         elif self.Pick_success and not self.Home_success:
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
-            self.set_home_walkie(0,0,0,0,0,0.79)
+            self.set_home_walkie(0,0,0,0,0,-0.79)
+            self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
-            x.success = False
-            x.message = "Pick success, Home fail"
+            x.success = True
+            x.message = "Pick success, but cannot go home"
         else:
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
-            self.set_home_walkie(0,0,0,0,0,0.79)
+            self.set_home_walkie(0,0,0,0,0,-0.79)
+            self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
             x.success = False
             x.message = "Pick Fail"
