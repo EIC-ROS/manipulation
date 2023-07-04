@@ -1,0 +1,21 @@
+Frame: map
+Furniture:
+- id: kitchen
+  mesh_source: Table.stl
+  pose:
+    orientation:
+      w: 0.904202938079834
+      x: -2.5474900411381896e-08
+      y: -2.0949529003916334e-12
+      z: 0.42710310220718384
+    position:
+      x: 1.7286399602890015
+      y: 0.01959383487701416
+      z: 0.0
+  shape:
+    x: 1
+    y: 1
+    z: 1
+  type: mesh
+Mesh_Folder: /mesh/
+Name: kk
