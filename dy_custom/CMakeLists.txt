@@ -19,6 +19,8 @@ find_package(catkin REQUIRED
     dynamixel_sdk
     roslaunch
 )
+catkin_python_setup()
+
 roslaunch_add_file_check(launch)
 ################################################################################
 # Declare ROS messages, services and actions

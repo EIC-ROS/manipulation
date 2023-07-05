@@ -205,7 +205,7 @@ bool setDigitalGripper(
   int temp;
 
   int abs_velocity = 40;
-  int diffposition = 8000;
+  int diffposition = 7800;
 
   if (req.id == -1)
   {
@@ -297,11 +297,11 @@ int main(int argc, char ** argv)
 	
   ros::init(argc, argv, "cameragrip");
   ros::NodeHandle nh;
-  ros::ServiceServer get_position_srv = nh.advertiseService("/get_position", getPresentPositionCallback);
-  ros::ServiceServer set_camera_srv = nh.advertiseService("/set_camera", setCamera);
-  ros::ServiceServer get_load_srv = nh.advertiseService("/get_load", getPresentLoadCallback);
-  ros::ServiceServer set_gripper_srv = nh.advertiseService("/set_gripper", setGripper);
-  ros::ServiceServer set_digital_gripper_srv = nh.advertiseService("/set_digital_gripper", setDigitalGripper);
+  ros::ServiceServer get_position_srv = nh.advertiseService("/dy_custom/get_position", getPresentPositionCallback);
+  ros::ServiceServer set_camera_srv = nh.advertiseService("/dy_custom/camera/set_camera", setCamera);
+  ros::ServiceServer get_load_srv = nh.advertiseService("/dy_custom/get_load", getPresentLoadCallback);
+  ros::ServiceServer set_gripper_srv = nh.advertiseService("/dy_custom/gripper/set_analog", setGripper);
+  ros::ServiceServer set_digital_gripper_srv = nh.advertiseService("/dy_custom/gripper/set_digital", setDigitalGripper);
   ros::spin();
   ros::spin();
 

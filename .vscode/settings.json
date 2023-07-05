@@ -1,11 +1,4 @@
 {
-    "files.associations": {
-        "unordered_map": "cpp",
-        "thread": "cpp",
-        "bitset": "cpp",
-        "chrono": "cpp",
-        "algorithm": "cpp"
-    },
     "python.autoComplete.extraPaths": [
         "/home/bham/walkie_ws/devel/lib/python3/dist-packages",
         "/home/bham/ws_moveit/devel/lib/python3/dist-packages",
