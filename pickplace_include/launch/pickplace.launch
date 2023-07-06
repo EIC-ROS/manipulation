@@ -1,6 +1,6 @@
 <launch>
-    <include file = "$(find dobot_moveit)/launch/moveit.launch"/>
-    <!-- <include file = "$(find dobot_moveit)/launch/demo.launch"/> -->
+    <!-- <include file = "$(find dobot_moveit)/launch/moveit.launch"/> -->
+    <include file = "$(find dobot_moveit)/launch/demo.launch"/>
     <include file = "$(find pick)/launch/pick.launch"/>
     <include file = "$(find place)/launch/place.launch"/>
     <!-- <node pkg = "simple_environment_expostulate" name = "SEX_Manipulation" type = "SEX_Manipulation.py"/> -->
