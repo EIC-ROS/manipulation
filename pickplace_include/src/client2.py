@@ -28,7 +28,7 @@ srv.posercam.pose.position.z = 0.507
 # srv.posercam.pose.position.y = 0
 # srv.posercam.pose.position.z = 0.785
 
-srv.check = False
+srv.check = True
 
 roll = 0
 pitch = 0

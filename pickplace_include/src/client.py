@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import rospy
-from pickplace_include.srv import pickplace, pickplaceRequest, pickplaceResponse
+from pickplace_include.srv import pickplace, pickplaceRequest
 from geometry_msgs.msg import PoseStamped
 from tf.transformations import quaternion_from_euler
 
@@ -23,7 +23,7 @@ srv.posercam.pose.orientation.y = quat[1]
 srv.posercam.pose.orientation.z = quat[2]
 srv.posercam.pose.orientation.w = quat[3]
 
-srv.check = True
+srv.check = False
 #water bottle
 srv.dimension.x = 0.06
 srv.dimension.y = 0.06

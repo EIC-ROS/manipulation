@@ -7,6 +7,7 @@ import tf
 import copy
 import math
 from pickplace_include.srv import placecond, placecondResponse
+from dy_custom.srv import SetDigitalGripper, SetDigitalGripperRequest
 
 class cr3pick:
     def __init__(self):
@@ -15,6 +16,9 @@ class cr3pick:
         self.move_group = moveit_commander.MoveGroupCommander("arm")
         self.scene = moveit_commander.PlanningSceneInterface()
         self.robot = moveit_commander.RobotCommander()
+        
+        self.DigitalGripperClient = rospy.ServiceProxy('/dy_custom/gripper/set_digital', SetDigitalGripper)
+        self.digital_grip_srv = SetDigitalGripperRequest()
         
         self.tf_listener1 = tf.TransformListener()
         self.tf_listener2 = tf.TransformListener()
@@ -88,7 +92,14 @@ class cr3pick:
             self.attempt = 1
             gp = Pose()
             
-            self.scene.remove_attached_object("eff_base_link", "box1")
+            try:
+                rospy.wait_for_service('/dy_custom/gripper/set_digital')
+                self.digital_grip_srv.id = -1
+                response = self.DigitalGripperClient(self.digital_grip_srv)
+            except rospy.ServiceException as e:
+                rospy.logerr("Failed to call service: %s", str(e))
+                exit(1)
+            self.scene.remove_attached_object("eff", "box1")
                 
             self.tf_listener2.waitForTransform("base_link", "place_approach", rospy.Time(), rospy.Duration(1.0))
             (trans2, rot2) = self.tf_listener2.lookupTransform("base_link", "place_approach", rospy.Time(0))
@@ -110,6 +121,7 @@ class cr3pick:
             
             # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
             self.set_home_walkie(0,0,0,0,0,0)
+            self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
             
             if not self.Home_success:
                 self.tf_listener3.waitForTransform("base_link", "place_safe_retreat", rospy.Time(), rospy.Duration(1.0))
@@ -132,6 +144,7 @@ class cr3pick:
                 
                 # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
                 self.set_home_walkie(0,0,0,0,0,0)
+                self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
             
             x = placecondResponse()
             if self.Table_success and self.Home_success:
@@ -139,6 +152,7 @@ class cr3pick:
                 x.message = "The object is sucessfully placed, and the arm returned to Home"
             elif self.Table_success and not self.Home_success:
                 self.set_home_walkie(0,0,0,0,0,0)
+                self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
                 if not self.Home_success:
                     x.success = True
                     x.message = "The object is successfully placed, but the arm couldn't manage to return back to Home"
@@ -230,6 +244,7 @@ class cr3pick:
                 
                 # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
                 self.set_home_walkie(0,0,0,0,0,0)
+                self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
                 
                 if not self.Home_success:
                     self.tf_listener7.waitForTransform("base_link", "place_safe_retreat", rospy.Time(), rospy.Duration(1.0))
@@ -252,6 +267,7 @@ class cr3pick:
                     
                     # self.set_home_walkie(0,0.55,-2.5,2.3,3.14,1)
                     self.set_home_walkie(0,0,0,0,0,0)
+                    self.set_home_walkie(0,-0.244, -2.269, -0.68, -1.57, -0.785)
                 
             x = placecondResponse()
             if self.Table_success and self.Home_success:

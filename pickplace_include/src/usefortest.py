@@ -5,7 +5,7 @@ from pickplace_include.joint_command import *
 
 
 if __name__ == "__main__":
-    rospy.init_node('tester')
+    rospy.init_node('testeradfjil')
     a = walkie_cr3()
     while not rospy.is_shutdown():
         b = str(input())

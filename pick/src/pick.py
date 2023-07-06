@@ -8,6 +8,8 @@ import math
 from std_srvs.srv import Trigger, TriggerResponse, TriggerRequest
 from pickplace_include.srv import tfcount, tfcountRequest, tfcountResponse
 from moveit_msgs.msg import Constraints, OrientationConstraint
+from dy_custom.srv import SetDigitalGripper, SetDigitalGripperRequest
+
 
 class cr3pick:
     def __init__(self):
@@ -22,6 +24,9 @@ class cr3pick:
         self.cartesian2 = False
         self.s = rospy.Service("pick", Trigger, self.callback)
         self.success = False
+        
+        self.DigitalGripperClient = rospy.ServiceProxy('/dy_custom/gripper/set_digital', SetDigitalGripper)
+        self.digital_grip_srv = SetDigitalGripperRequest()
         
         self.subframe1 = 'obj_approach_pose'
         self.subframe2 = 'obj_grasp_pose'
@@ -149,6 +154,13 @@ class cr3pick:
                 rospy.logwarn("Grasped")
                 rospy.sleep(0.5)
                 
+            try:
+                rospy.wait_for_service('/dy_custom/gripper/set_digital')
+                self.digital_grip_srv.id = 0
+                response = self.DigitalGripperClient(self.digital_grip_srv)
+            except rospy.ServiceException as e:
+                rospy.logerr("Failed to call service: %s", str(e))
+                exit(1)
             self.scene.attach_box("eff", "box1", touch_links=self.touch_links)
             # self.move_group.set_planner_id("TRRT")
             
